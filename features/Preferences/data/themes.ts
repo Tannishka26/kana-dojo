@@ -701,6 +701,12 @@ const baseThemeSets: BaseThemeGroup[] = [
         backgroundColor: 'oklch(17.0% 0.032 270.0 / 1)',
         mainColor: 'oklch(87.0% 0.135 215.0 / 1)',
         secondaryColor: 'oklch(74.0% 0.110 305.0 / 1)'
+      },
+      {
+        id: 'yume-mori',
+        backgroundColor: 'oklch(20.0% 0.040 190.0 / 1)',
+        mainColor:       'oklch(86.0% 0.140 180.0 / 1)', 
+        secondaryColor:  'oklch(74.0% 0.090 150.0 / 1)',  
       }
     ]
   },
