@@ -548,7 +548,7 @@ const baseThemeSets: BaseThemeGroup[] = [
       },
       {
         id: 'lapis-solara',
-        backgroundColor: 'oklch(17.75% 0.0468 268.47 / 1)',
+        backgroundColor: 'oklch(19% 0.0468 268.47 / 1)',
         mainColor: 'oklch(96.43% 0.1338 105.98 / 1)',
         secondaryColor: 'oklch(77.85% 0.1273 297.95 / 1)'
       },

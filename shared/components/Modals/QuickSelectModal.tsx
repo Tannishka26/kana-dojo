@@ -62,8 +62,8 @@ const QuickSelectModal = ({
         }
       }}
     >
-      <div className='flex max-h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border-2 border-[var(--border-color)] bg-[var(--background-color)] sm:max-h-[80vh]'>
-        <div className='flex flex-shrink-0 items-center justify-between border-b-2 border-[var(--border-color)] p-4 sm:p-6'>
+      <div className='flex max-h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border-0 border-[var(--border-color)] bg-[var(--background-color)] sm:max-h-[80vh]'>
+        <div className='flex flex-shrink-0 items-center justify-between border-b-1 border-[var(--border-color)] p-4 sm:p-6'>
           <div>
             <h2 className='text-xl font-bold text-[var(--main-color)] sm:text-2xl'>
               Quick Select - {unitName.toUpperCase()}
@@ -83,7 +83,7 @@ const QuickSelectModal = ({
           </button>
         </div>
 
-        <div className='flex flex-shrink-0 flex-wrap gap-2 border-b-2 border-[var(--border-color)] p-3 sm:gap-3 sm:p-4'>
+        <div className='flex flex-shrink-0 flex-wrap gap-2 border-b-1 border-[var(--border-color)] p-3 sm:gap-3 sm:p-4'>
           {[
             {
               label: 'Select All',
@@ -158,8 +158,8 @@ const QuickSelectModal = ({
                     <btn.icon
                       size={16}
                       className={cn(
-                        'fill-current text-current',
-                        btn.label === 'Clear All' && 'px-2'
+                        'fill-current text-current'
+                        // btn.label === 'Clear All' && 'px-2'
                       )}
                     />
                   ) : null}
@@ -182,9 +182,9 @@ const QuickSelectModal = ({
             }}
             placeholder='search for a level...'
             className={clsx(
-              'rounded-xl border-2 px-3 py-2 text-sm transition-all sm:px-4',
+              'rounded-2xl border-1 px-3 py-2 text-sm transition-all sm:px-4',
               'border-[var(--border-color)] hover:bg-[var(--card-color)]',
-              'text-[var(--secondary-color)]',
+              'text-[var(--main-color)]',
               'focus:ring-offset-2-[var(--secondary-color)]/80 focus:ring focus:outline-0'
             )}
           />
@@ -219,7 +219,7 @@ const QuickSelectModal = ({
                       'flex flex-col items-center gap-2 p-3 sm:p-4',
                       isSelected
                         ? 'order-first'
-                        : 'border-2 border-[var(--border-color)] bg-[var(--card-color)] text-[var(--secondary-color)]'
+                        : 'border-1 border-[var(--border-color)] bg-[var(--card-color)] text-[var(--secondary-color)]'
                     )}
                   >
                     {isSelected ? (
@@ -248,7 +248,7 @@ const QuickSelectModal = ({
           )}
         </div>
 
-        <div className='flex flex-shrink-0 justify-end border-t-2 border-[var(--border-color)] p-3 sm:p-4'>
+        <div className='flex flex-shrink-0 justify-end border-t-1 border-[var(--border-color)] p-3 sm:p-4'>
           <ActionButton
             onClick={() => {
               playClick();
