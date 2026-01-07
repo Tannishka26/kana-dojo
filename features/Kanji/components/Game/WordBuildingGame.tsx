@@ -1,6 +1,11 @@
 'use client';
 import { useState, useEffect, useMemo, useCallback, useRef, memo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import {
+  motion,
+  AnimatePresence,
+  type Variants,
+  type MotionStyle
+} from 'framer-motion';
 import clsx from 'clsx';
 import useKanjiStore, { IKanjiObj } from '@/features/Kanji/store/useKanjiStore';
 import { Random } from 'random-js';
@@ -142,11 +147,21 @@ interface TileProps {
   onClick: () => void;
   isDisabled?: boolean;
   isKanji?: boolean;
+  variants?: Variants;
+  motionStyle?: MotionStyle;
 }
 
 // Active tile - uses layoutId for smooth position animations
 const ActiveTile = memo(
-  ({ id, char, onClick, isDisabled, isKanji }: TileProps) => {
+  ({
+    id,
+    char,
+    onClick,
+    isDisabled,
+    isKanji,
+    variants,
+    motionStyle
+  }: TileProps) => {
     return (
       <motion.button
         layoutId={id}
@@ -154,6 +169,7 @@ const ActiveTile = memo(
         type='button'
         onClick={onClick}
         disabled={isDisabled}
+        variants={variants}
         className={clsx(
           tileBaseStyles,
           'cursor-pointer transition-colors',
@@ -165,6 +181,7 @@ const ActiveTile = memo(
         )}
         transition={springConfig}
         lang={isKanji ? 'ja' : undefined}
+        style={motionStyle}
       >
         {char}
       </motion.button>
@@ -616,19 +633,16 @@ const KanjiWordBuildingGame = ({
                 >
                   {/* Render placed tiles in the answer row */}
                   {placedTiles.map(char => (
-                    <motion.div
+                    <ActiveTile
                       key={`answer-tile-${char}`}
+                      id={`tile-${char}`}
+                      char={char}
+                      onClick={() => handleTileClick(char)}
+                      isDisabled={isChecking && bottomBarState !== 'wrong'}
+                      isKanji={isReverse}
                       variants={celebrationBounceVariants}
-                      style={{ originY: 1 }}
-                    >
-                      <ActiveTile
-                        id={`tile-${char}`}
-                        char={char}
-                        onClick={() => handleTileClick(char)}
-                        isDisabled={isChecking && bottomBarState !== 'wrong'}
-                        isKanji={isReverse}
-                      />
-                    </motion.div>
+                      motionStyle={{ transformOrigin: '50% 100%' }}
+                    />
                   ))}
                 </motion.div>
               </div>

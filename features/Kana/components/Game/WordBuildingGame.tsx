@@ -1,6 +1,11 @@
 'use client';
 import { useState, useEffect, useMemo, useCallback, useRef, memo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import {
+  motion,
+  AnimatePresence,
+  type Variants,
+  type MotionStyle
+} from 'framer-motion';
 import clsx from 'clsx';
 import { kana } from '@/features/Kana/data/kana';
 import useKanaStore from '@/features/Kana/store/useKanaStore';
@@ -153,31 +158,37 @@ interface TileProps {
   char: string;
   onClick: () => void;
   isDisabled?: boolean;
+  variants?: Variants;
+  motionStyle?: MotionStyle;
 }
 
 // Active tile - uses layoutId for smooth position animations
-const ActiveTile = memo(({ id, char, onClick, isDisabled }: TileProps) => {
-  return (
-    <motion.button
-      layoutId={id}
-      layout='position'
-      type='button'
-      onClick={onClick}
-      disabled={isDisabled}
-      className={clsx(
-        tileBaseStyles,
-        'cursor-pointer transition-colors',
-        // Match ActionButton's smooth press animation: translate down + add margin to prevent layout shift
-        'active:mb-[10px] active:translate-y-[10px] active:border-b-0',
-        'border-[var(--secondary-color-accent)] bg-[var(--secondary-color)] text-[var(--background-color)]',
-        isDisabled && 'cursor-not-allowed opacity-50'
-      )}
-      transition={springConfig}
-    >
-      {char}
-    </motion.button>
-  );
-});
+const ActiveTile = memo(
+  ({ id, char, onClick, isDisabled, variants, motionStyle }: TileProps) => {
+    return (
+      <motion.button
+        layoutId={id}
+        layout='position'
+        type='button'
+        onClick={onClick}
+        disabled={isDisabled}
+        variants={variants}
+        className={clsx(
+          tileBaseStyles,
+          'cursor-pointer transition-colors',
+          // Match ActionButton's smooth press animation: translate down + add margin to prevent layout shift
+          'active:mb-[10px] active:translate-y-[10px] active:border-b-0',
+          'border-[var(--secondary-color-accent)] bg-[var(--secondary-color)] text-[var(--background-color)]',
+          isDisabled && 'cursor-not-allowed opacity-50'
+        )}
+        transition={springConfig}
+        style={motionStyle}
+      >
+        {char}
+      </motion.button>
+    );
+  }
+);
 
 ActiveTile.displayName = 'ActiveTile';
 
@@ -594,18 +605,15 @@ const WordBuildingGame = ({
               >
                 {/* Render placed tiles in the answer row */}
                 {placedTiles.map(char => (
-                  <motion.div
+                  <ActiveTile
                     key={`answer-tile-${char}`}
+                    id={`tile-${char}`}
+                    char={char}
+                    onClick={() => handleTileClick(char)}
+                    isDisabled={isChecking && bottomBarState !== 'wrong'}
                     variants={celebrationBounceVariants}
-                    style={{ originY: 1 }}
-                  >
-                    <ActiveTile
-                      id={`tile-${char}`}
-                      char={char}
-                      onClick={() => handleTileClick(char)}
-                      isDisabled={isChecking && bottomBarState !== 'wrong'}
-                    />
-                  </motion.div>
+                    motionStyle={{ transformOrigin: '50% 100%' }}
+                  />
                 ))}
               </motion.div>
             </div>
