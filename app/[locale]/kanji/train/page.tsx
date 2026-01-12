@@ -3,6 +3,13 @@ import type { Metadata } from 'next';
 import { generatePageMetadata } from '@/core/i18n/metadata-helpers';
 import { CourseSchema } from '@/shared/components/SEO/CourseSchema';
 import { BreadcrumbSchema } from '@/shared/components/SEO/BreadcrumbSchema';
+import { routing } from '@/core/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map(locale => ({ locale }));
+}
+
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   return await generatePageMetadata('kanjiTrain');

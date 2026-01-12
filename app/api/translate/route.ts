@@ -192,11 +192,14 @@ export async function POST(request: NextRequest) {
     const cacheKey = getCacheKey(text.trim(), sourceLanguage, targetLanguage);
     const cached = translationCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-      return NextResponse.json({
+      const response = NextResponse.json({
         translatedText: cached.translatedText,
         romanization: cached.romanization,
         cached: true
       });
+      // Allow browser to cache translation results for 1 hour
+      response.headers.set('Cache-Control', 'private, max-age=3600');
+      return response;
     }
 
     // Get API key from environment
@@ -288,11 +291,14 @@ export async function POST(request: NextRequest) {
     });
     cleanupCache();
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       translatedText: translation.translatedText,
       detectedSourceLanguage: translation.detectedSourceLanguage,
       romanization
     });
+    // Allow browser to cache translation results for 1 hour
+    response.headers.set('Cache-Control', 'private, max-age=3600');
+    return response;
   } catch (error) {
     console.error('Translation API error:', error);
 

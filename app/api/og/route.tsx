@@ -113,7 +113,11 @@ export async function GET(request: NextRequest) {
       ),
       {
         width: 1200,
-        height: 630
+        height: 630,
+        // Cache OG images at CDN for 24 hours, allow stale for 7 days
+        headers: {
+          'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800'
+        }
       }
     );
   } catch (e) {

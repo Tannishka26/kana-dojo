@@ -1,7 +1,13 @@
 import { getTranslations } from 'next-intl/server';
 import { generatePageMetadata } from '@/core/i18n/metadata-helpers';
-import type { Locale } from '@/core/i18n/routing';
+import { routing, type Locale } from '@/core/i18n/routing';
 import FAQSection from './FAQSection';
+
+export function generateStaticParams() {
+  return routing.locales.map(locale => ({ locale }));
+}
+
+export const revalidate = 3600;
 
 export async function generateMetadata({
   params

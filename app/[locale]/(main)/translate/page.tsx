@@ -2,6 +2,13 @@ import type { Metadata } from 'next';
 import { TranslatorPage } from '@/features/Translator';
 import { StructuredData } from '@/shared/components/SEO/StructuredData';
 import { generatePageMetadata } from '@/core/i18n/metadata-helpers';
+import { routing } from '@/core/i18n/routing';
+
+export function generateStaticParams() {
+  return routing.locales.map(locale => ({ locale }));
+}
+
+export const revalidate = 3600;
 
 // JSON-LD structured data for the translator page
 const translatorSchema = {

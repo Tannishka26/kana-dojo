@@ -2,15 +2,13 @@ import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 import { routing } from './core/i18n/routing';
 
-const isDev = process.env.NODE_ENV !== 'production';
-
-// In production, use full next-intl middleware
-// In dev with single locale, use minimal custom middleware for performance
-const intlMiddleware = !isDev ? createMiddleware(routing) : null;
+// Create intl middleware once at module level (more efficient)
+const intlMiddleware = createMiddleware(routing);
 
 export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Fast path - skip for paths that don't need locale handling
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
@@ -22,20 +20,14 @@ export default function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Extract locale from pathname
+  // Extract locale from pathname (URLs have /en/, /es/, /ja/ prefixes)
   const localeMatch = pathname.match(/^\/(en|es|ja)/);
   const locale = localeMatch ? localeMatch[1] : 'en';
 
-  if (isDev) {
-    const url = request.nextUrl.clone();
-    url.pathname = `/en${pathname}`;
-    const response = NextResponse.rewrite(url);
-    response.headers.set('x-locale', 'en');
-    return response;
-  }
-
-  const response = intlMiddleware!(request);
+  // Use next-intl middleware for locale handling
+  const response = intlMiddleware(request);
   response.headers.set('x-locale', locale);
+
   return response;
 }
 

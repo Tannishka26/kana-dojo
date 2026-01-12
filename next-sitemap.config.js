@@ -9,7 +9,9 @@ export default {
   exclude: [
     '/api/*',
     '/_next/*',
-    '/*/train/*' // Exclude dynamic training pages
+    '/*/train/*', // Exclude dynamic training pages
+    '/es/*', // Exclude es/ja locales - we only generate /en/* URLs
+    '/ja/*' // and add alternateRefs for other locales
   ],
   robotsTxtOptions: {
     policies: [
@@ -74,6 +76,8 @@ export default {
 
     const siteUrl = config.siteUrl || 'https://kanadojo.com';
 
+    // FIX: Use absolute URLs for alternateRefs to prevent path doubling
+    // next-sitemap was appending href to loc, causing /en/kana/en/kana
     return {
       loc: path,
       changefreq,
@@ -82,19 +86,23 @@ export default {
       alternateRefs: [
         {
           href: `${siteUrl}/en${basePath}`,
-          hreflang: 'en'
+          hreflang: 'en',
+          hrefIsAbsolute: true
         },
         {
           href: `${siteUrl}/es${basePath}`,
-          hreflang: 'es'
+          hreflang: 'es',
+          hrefIsAbsolute: true
         },
         {
           href: `${siteUrl}/ja${basePath}`,
-          hreflang: 'ja'
+          hreflang: 'ja',
+          hrefIsAbsolute: true
         },
         {
           href: `${siteUrl}/en${basePath}`,
-          hreflang: 'x-default'
+          hreflang: 'x-default',
+          hrefIsAbsolute: true
         }
       ]
     };
